@@ -5,7 +5,7 @@ import pickle
 import pymongo
 from tqdm import tqdm
 if __name__ == "__main__":
-    f_list = sorted(glob.glob('/Users/LeeYK/Documents/jupyters/PythonScripts/input_data/*.txt'))
+    f_list = sorted(glob.glob('/Users/LeeYK/Documents/jupyters/PythonScripts/input_data/*.txt'))[:5]
     zinc_list = set()
     for f in f_list:
         out_dict = {}
@@ -28,17 +28,17 @@ if __name__ == "__main__":
     client = pymongo.MongoClient('mongodb://localhost:27017/')
     db = client['zinc_db']
     collection = db['zinc_collection']
-    for zid in tqdm(zinc_list):
-        final_dict = {}
+    for zid in tqdm(list(zinc_list)[:100]):
+        final_dict = {zid:{}}
         for p in pickle_list:
             fname = os.path.basename(p).split('.')[0]
             with open(p,'rb') as f:
                 temp = pickle.load(f)
             if zid in temp:
-                final_dict[zid] = temp[zid]
+                t_dict = temp[zid]
+                final_dict[zid].update(t_dict)
         # mongodb insert
         collection.insert_one(final_dict)
     client.close()
     print('Done')
-            
     
