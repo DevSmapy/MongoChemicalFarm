@@ -40,7 +40,5 @@ if __name__ == "__main__":
         collection.insert_one(final_dict)
     client.close()
     print('Done')
-
-    # Path: query.py
             
     
