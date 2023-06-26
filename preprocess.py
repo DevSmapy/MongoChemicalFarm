@@ -28,7 +28,7 @@ if __name__ == "__main__":
     client = pymongo.MongoClient('mongodb://localhost:27017/')
     db = client['zinc_db']
     collection = db['zinc_collection']
-    for zid in zinc_list:
+    for zid in tqdm(zinc_list):
         final_dict = {}
         for p in pickle_list:
             fname = os.path.basename(p).split('.')[0]
