@@ -4,8 +4,9 @@ import os
 import pickle
 import pymongo
 from tqdm import tqdm
-if __name__ == "__main__":
-    f_list = sorted(glob.glob('/Users/LeeYK/Documents/jupyters/PythonScripts/input_data/*.txt'))[:5]
+
+
+def make_id_dict(f_list):
     zinc_list = set()
     for f in f_list:
         out_dict = {}
@@ -24,7 +25,10 @@ if __name__ == "__main__":
                 out_dict[zinc_id] = {fname:temp}
         with open(f'/Users/LeeYK/Documents/jupyters/PythonScripts/output_data/{fname}.pkl','wb') as f:
             pickle.dump(out_dict,f)
-    pickle_list = sorted(glob.glob('/Users/LeeYK/Documents/jupyters/PythonScripts/output_data/*.pkl'))
+    return zinc_list
+
+
+def make_mongo_dict(pickle_list,zinc_list):
     client = pymongo.MongoClient('mongodb://localhost:27017/')
     db = client['zinc_db']
     collection = db['zinc_collection']
@@ -41,4 +45,16 @@ if __name__ == "__main__":
         collection.insert_one(final_dict)
     client.close()
     print('Done')
+
+
+def main():
+    f_list = sorted(glob.glob('/Users/LeeYK/Documents/jupyters/PythonScripts/input_data/*.txt'))[:5]
+    zinc_list = make_id_dict(f_list)
+    pickle_list = sorted(glob.glob('/Users/LeeYK/Documents/jupyters/PythonScripts/output_data/*.pkl'))
+    make_mongo_dict(pickle_list,zinc_list)
+
+
+
+if __name__ == "__main__":
+    main()
     
