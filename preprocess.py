@@ -38,6 +38,9 @@ if __name__ == "__main__":
                 final_dict[zid] = temp[zid]
         # mongodb insert
         collection.insert_one(final_dict)
-        client.close()
+    client.close()
+    print('Done')
+
+    
             
     
